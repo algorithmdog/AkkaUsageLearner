@@ -27,10 +27,18 @@ class TeacherActor extends Actor {
   }
 }
 
-object TeacherServices extends App { //为什么感觉 TeacherService 这个名字有点邪恶。
+object TeacherServices extends App {
 
-  val system = ActorSystem("TeacherService",  ConfigFactory.parseResources("lietal.conf").getConfig("RemoteServerSideActor "))
+  val config = ConfigFactory
+    .parseResources("lietal.conf")
+    .getConfig("RemoteServerSideActor")
+  //读入配置
 
-  system.actorOf(Props[TeacherActor], "teacherActor") // 创建一个名称为remoteActor的Actor，返回一个ActorRef，这里我们不需要使用这个返回值
+  val system = ActorSystem("TeacherService",  config)
+  //使用配置，建立 Actor 模型系统 ActorSystem。
+  //ActorSystem 是访问 Actor 模型系统的接口，类似于 Spark 的 SparkContext。
 
+  system.actorOf(Props[TeacherActor], "teacherActor")
+  //创建TearcherActor，返回一个引用
+  //这里，我们并不需要使用这个引用
 }
