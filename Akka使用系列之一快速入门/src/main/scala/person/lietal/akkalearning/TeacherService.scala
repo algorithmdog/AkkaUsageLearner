@@ -38,7 +38,8 @@ object TeacherServices extends App {
   //使用配置，建立 Actor 模型系统 ActorSystem。
   //ActorSystem 是访问 Actor 模型系统的接口，类似于 Spark 的 SparkContext。
 
-  system.actorOf(Props[TeacherActor], "teacherActor")
+  val actor = system.actorOf(Props[TeacherActor], "teacherActor")
   //创建TearcherActor，返回一个引用
   //这里，我们并不需要使用这个引用
+  println (actor.toString())
 }
