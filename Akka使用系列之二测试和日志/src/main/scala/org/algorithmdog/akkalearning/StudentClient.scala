@@ -8,7 +8,7 @@ import com.typesafe.config.ConfigFactory
   */
 
 class StudentActor extends Actor{
-  val path = "akka.tcp://remote-system@127.0.0.1:4999/user/teacherActor"
+  val path = "akka.tcp://TeacherService@127.0.0.1:4999/user/teacherActor"
   // 远程Actor的路径，通过该路径能够获取到远程Actor的一个引用
   val remoteServerRef = context.actorSelection(path)
   // 获取到远程Actor的一个引用，通过该引用可以向远程Actor发送消息
