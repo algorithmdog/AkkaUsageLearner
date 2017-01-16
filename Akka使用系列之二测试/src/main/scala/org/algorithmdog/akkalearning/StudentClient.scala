@@ -1,16 +1,18 @@
 package org.algorithmdog.akkalearning
 
-import akka.actor.{Actor, ActorSystem, Props}
+import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 import com.typesafe.config.ConfigFactory
+import scala.concurrent.Await
+import akka.util.Timeout
+import scala.concurrent.duration._
 
 /**
   * Created by lietal on 2016/12/25.
   */
 
-class StudentActor extends Actor{
-  val path = "akka.tcp://TeacherService@127.0.0.1:4999/user/teacherActor"
-  // 远程Actor的路径，通过该路径能够获取到远程Actor的一个引用
-  val remoteServerRef = context.actorSelection(path)
+class StudentActor (remoteTeacher:ActorRef) extends Actor{
+
+  val remoteServerRef = remoteTeacher
   // 获取到远程Actor的一个引用，通过该引用可以向远程Actor发送消息
 
   def receive = {
@@ -24,7 +26,7 @@ class StudentActor extends Actor{
     }
 }
 
-object StudentSimulator extends App{
+object RemoteStudentSimulatorApp extends App{
   val config = ConfigFactory
     .parseResources("lietal.conf")
     .getConfig("RemoteClientSideActor")
@@ -33,7 +35,10 @@ object StudentSimulator extends App{
   val actorSystem = ActorSystem("StudentClient",  config);
   //使用配置，建立 ActorSystem
 
-  val studentActor = actorSystem.actorOf(Props[StudentActor])
+  implicit val resolveTimeout = Timeout(5 seconds)
+  val teacherActor = Await.result(actorSystem.actorSelection("akka.tcp://TeacherService@127.0.0.1:4999/user/teacherActor").resolveOne(), resolveTimeout.duration)
+  // 远程Actor的路径，通过该路径能够获取到远程Actor的一个引用
+  val studentActor = actorSystem.actorOf(Props(new StudentActor(teacherActor)))
   //获得 StudentActor 的一个引用。
   //在程序中 Actor 不能直接被访问。
   //所有操作都必须通过 ActorRef 引用。
