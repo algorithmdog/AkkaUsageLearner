@@ -27,17 +27,13 @@ class TeacherServiceTest extends TestKit(ActorSystem("SummerSchool"))
   with WordSpecLike
   with BeforeAndAfter{
 
-  before{
-
-  }
-
   "The countAnswer " must {
     "increase after response a answer" in {
 
       val teacherRef = TestActorRef[TeacherActor]
       teacherRef ! "aa"
-      assert(teacherRef.underlyingActor.coutAnswer == 2)
-
+      //assert(teacherRef.underlyingActor.coutAnswer == 1)
+      expectMsg("hello aa")
     }
   }
 
