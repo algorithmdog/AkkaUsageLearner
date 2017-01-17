@@ -1,7 +1,8 @@
 package org.algorithmdog.akkalearning
 
-import akka.actor.ActorSystem
+import akka.actor.{ActorSystem, Props}
 import akka.testkit.{EventFilter, ImplicitSender, TestActorRef, TestKit, TestProbe}
+import com.typesafe.config.ConfigFactory
 import org.junit.runner.RunWith
 import org.scalatest._
 import org.scalatest.junit.JUnitRunner
@@ -11,20 +12,12 @@ import org.scalatest.junit.JUnitRunner
   * Created by lietal on 2017/1/3.
   */
 
-
-/*
-@RunWith(classOf[JUnitRunner])
-class TeacherServiceTest1 extends FunSuite with BeforeAndAfter{
-  test("countAnswer"){
-    val teacherRef = ActorSystem("SummerSchool").actorOf(Props[TeacherActor])
-    teacherRef ! "aa"
-    assert(teacherRef.underlyingActor.coutAnswer == 2) //这行会出错，无法访问 actor 内部
-  }
-}
-*/
+/**
+  * 看了博客的同学主要看 StudentActorTest。这个(TeacherActorTest)只是写着玩。
+  */
 
 @RunWith(classOf[JUnitRunner])
-class TeacherActorTest extends TestKit(ActorSystem("SummerSchool"))
+class TeacherActorTest extends TestKit(ActorSystem("SummerSchool",ConfigFactory.parseString("""akka.loggers = ["akka.testkit.TestEventListener"]""")))
   with ImplicitSender
   with WordSpecLike
   with BeforeAndAfterAll{
@@ -44,9 +37,9 @@ class TeacherActorTest extends TestKit(ActorSystem("SummerSchool"))
   // 测试是否正确 logging, eventFilter
   "The countAnswer" must {
     "logging when receive a question" in  {
-      val testActorRef = TestActorRef[TeacherActor]
-      EventFilter.info(pattern = ".*receives aa.*",occurrences = 1).intercept({
-        testActorRef ! "aa";
+      val teacherRef = system.actorOf(Props[TeacherActor])
+      EventFilter.info(pattern = ".*",occurrences = 1).intercept({
+        teacherRef ! "aa";
       })
     }
   }

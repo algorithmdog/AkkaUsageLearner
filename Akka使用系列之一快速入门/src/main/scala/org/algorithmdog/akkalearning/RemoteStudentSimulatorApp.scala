@@ -1,34 +1,19 @@
 package org.algorithmdog.akkalearning
 
-import akka.actor.{Actor, ActorRef, ActorSystem, Props}
-import com.typesafe.config.ConfigFactory
-import scala.concurrent.Await
+import akka.actor.{ActorSystem, Props}
 import akka.util.Timeout
+import com.typesafe.config.ConfigFactory
+import akka.util.Timeout
+
+import scala.concurrent.Await
 import scala.concurrent.duration._
 
 /**
-  * Created by lietal on 2016/12/25.
+  * Created by gotoli on 2017/1/17.
   */
-
-class StudentActor (remoteTeacher:ActorRef) extends Actor{
-
-  val remoteServerRef = remoteTeacher
-  // 获取到远程Actor的一个引用，通过该引用可以向远程Actor发送消息
-
-  def receive = {
-      case res:String => {
-        println (res)
-      }
-      case time:Long => {
-        println("起床ing")
-        remoteServerRef ! "历史上规模最大的众筹行动是什么？";
-      }
-    }
-}
-
 object RemoteStudentSimulatorApp extends App{
   val config = ConfigFactory
-    .parseResources("lietal.conf")
+    .parseResources("example.conf")
     .getConfig("RemoteClientSideActor")
   //读入客户端配置
 

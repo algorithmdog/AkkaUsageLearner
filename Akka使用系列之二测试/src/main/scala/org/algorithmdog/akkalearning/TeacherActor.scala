@@ -5,10 +5,10 @@ package org.algorithmdog.akkalearning
   */
 
 
-import akka.actor.{Actor, ActorSystem, Props}
+import akka.actor.{Actor, ActorLogging, ActorSystem, Props}
 import com.typesafe.config.ConfigFactory
 
-class TeacherActor extends Actor {
+class TeacherActor extends Actor with ActorLogging {
   var coutAnswer = 0;
   def receive = {
     case "1+1等于多少?"           => {
@@ -27,6 +27,7 @@ class TeacherActor extends Actor {
       coutAnswer += 1;
     }
     case _              => {
+      log.info("it receives aa")
       val originalSender = sender;//
       sender ! "这个问题，老师也得查查书"
       coutAnswer += 1;
@@ -34,18 +35,3 @@ class TeacherActor extends Actor {
   }
 }
 
-object RemoteTeacherServicesApp extends App {
-
-  val config = ConfigFactory
-    .parseResources("lietal.conf")
-    .getConfig("RemoteServerSideActor")
-  //读入配置
-
-  val system = ActorSystem("TeacherService",  config)
-  //使用配置，建立 Actor 模型系统 ActorSystem。
-  //ActorSystem 是访问 Actor 模型系统的接口，类似于 Spark 的 SparkContext。
-
-  system.actorOf(Props[TeacherActor], "teacherActor")
-  //创建TearcherActor，返回一个引用
-  //这里，我们并不需要使用这个引用
-}

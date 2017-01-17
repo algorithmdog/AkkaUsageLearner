@@ -1,5 +1,7 @@
 package org.algorithmdog.akkalearning
 
+import akka.actor.{ActorSystem, Props}
+
 /**
   * Created by lietal on 2017/1/16.
   */
@@ -14,5 +16,6 @@ object localApp {
     Thread.sleep(1000);
 
     actorSystem.shutdown()
+  }
 
 }
