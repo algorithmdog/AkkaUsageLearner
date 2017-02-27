@@ -1,0 +1,81 @@
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Typesafe 公司统计过开发者使用 Akka 的原因。<!--more-->除了 Akka 的本质属性 —— 并行化，Akka 的层次结构以及带来的容错管理是开发者选择 Akka 的第一位原因。这篇文章就来聊聊 Akka 的层次结构和容错管理。
+
+
+<div align=center>
+<a href="http://www.algorithmdog.com/wp-content/uploads/2016/12/akka.png" rel="attachment wp-att-3677"><img src="http://www.algorithmdog.com/wp-content/uploads/2016/12/akka.png" alt="akka" width="1274" height="548" class="alignnone size-full wp-image-3677" /></a>
+</div>
+
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+### 1 层次结构
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们需要实现一个翻译模块，其功能是输入中文输出多国语言。我们可以让一个 Master Actor 负责接收外界输入，多个 Worker Actor 负责将输入翻译成特定语言，Master Actor 和 Worker Actor 之间是上下级层次关系。下图展示了这种层级结构。
+
+[!]()
+
+
+具体代码实现如下所示。
+
+<pre>
+
+class Master extends Actor with ActorLogging{
+      val english2chinese = 
+          context.actorOf(Props[English2Chinese],"English2Chinese")
+      val english2cat     = 
+          context.actorOf(Props[English2Cat],"English2Cat")
+  
+      def receive = {
+          case eng1:String =>{
+                
+            println("eng1=>")
+            val chinese = 
+            println(chinese)
+            val cat_lan = 
+            println(cat_lan)
+          }
+      }
+   
+}
+ 
+</pre>
+
+我们在 Master Actor 中使用 context.actorOf 实例化 English2Chinese 和 English2Cat，便可以在它们之间形成层次关系。这点通过它们的 actor 地址得到证实。
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Actor 层次结构不仅比较符合人类直觉，还为 Actor 的容错提供了机制保障。
+
+### 2 容错管理
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;容错性能是分布式系统的核心指标之一。假设一个分布式系统里的执行单元运行出错的概率是十万分之一（运行十万次出错一次，出错概率已经非常小了），一千个执行单元的分布式系统出错概率是 1 - (1-1/100000)^1000 = 0.01，就是说这个分布式系统运行一百次就会出错一次。上面例子说明，不管执行单元多鲁棒，大型分布式系统都需要容错管理。
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Akka 提供了完备的容错管理机制。还是拿上面翻译的例子，如果 English2Chinese Actor 或者 English2Cat Actor 发生错误，我们希望发生错误的 Actor 能够重启，那么我们可以使用下面的代码。
+
+<pre>
+
+</pre>
+
+其中。Akka 一共支持四种动作。
+
+1.
+2.
+3.
+4.
+      
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;上面例子中的 One 是指当错误发生了，容错策略只对发生错误的 Actor 起作用。但在某些场景中，我们希望一个子 Actor 发生错误了，容错策略作用于所有的子 Actor。这个时候我们可以用 xxx 策略，其代码如下所示。
+
+<pre>
+
+
+
+</pre>                                                                                                                                                                                                                                                                                                                                   
+### 3 总结
+
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 我们使用 Akka 开发并行程序时，可以使用层级结构组织 Actors。层次结构不仅比较符合人类直觉，还为容错提供了机制保障。Akka 的容错策略支持xxx,xxx,xxx 和 xxx 动作，并且支持 xxx 和 xxx 两种作用范围。
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;欢迎关注 AlgorithmDog 公众号，每两周的更新会有推送哦。
