@@ -20,8 +20,7 @@ class Master extends Actor with ActorLogging{
     def receive = {
         case eng1:String =>{
             english2chinese ! eng1
-            english2cat     ! eng1
-             
+            english2cat     ! eng1             
         }
     }
     
@@ -44,5 +43,11 @@ class English2Cat extends Actor with ActorLogging{
 }
 
 
-
+object Main{
+    def main(args:Array[String]):Unit = {
+        val sys = ActorSystem("system")
+        val master = sys.actorOf(Props[Master],"Master")
+        master ! "Hello,world!"
+    }
+}
 
