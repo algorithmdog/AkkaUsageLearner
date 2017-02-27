@@ -13,3 +13,9 @@ Akka 是广泛应用的编写的 Actor 模型库，使得开发人员可以轻�
  Akka-testkit 是 Akka 官方推出的 Akka 测试包，目的是减轻测试难度。Akka-testkit 的主要工具包括, 1) testProbe 用于测试 Actor 回应和发送消息，testActor 用于简便情况下测试 Actor 回应消息，和 2) testActorRef 用于测试 Actor 内部状态的改变。
  
 [博客地址]( http://www.algorithmdog.com/akka-test)
+
+### Akka 使用系列之三: 层次结构
+
+ 我们使用 Akka 开发并行程序时，可以使用层级结构组织 Actors。层次结构不仅比较符合人类直觉，还为容错提供了机制保障。
+ 
+[博客地址]( http://www.algorithmdog.com/akka-hierarchy)
