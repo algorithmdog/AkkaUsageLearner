@@ -19,3 +19,10 @@ Akka 是广泛应用的编写的 Actor 模型库，使得开发人员可以轻�
  我们使用 Akka 开发并行程序时，可以使用层级结构组织 Actors。层次结构不仅比较符合人类直觉，还为容错提供了机制保障。
  
 [博客地址]( http://www.algorithmdog.com/akka-hierarchy-fault)
+
+
+### Akka 使用系列之四: Future
+
+ 这篇文章介绍 Akka 的同步机制，以及 Spark 和 Akka 的恩怨情仇。
+ 
+[博客地址]( http://www.algorithmdog.com/akka-4-future)
